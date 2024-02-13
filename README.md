@@ -1,0 +1,2 @@
+# mutation_test_sample_code
+Mutation Testを確かめるためのサンプルコード
