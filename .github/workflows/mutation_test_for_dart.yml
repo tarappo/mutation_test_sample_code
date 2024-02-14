@@ -33,4 +33,10 @@ jobs:
         id: mutation-testing
         run: |
           cd dart
-          dart run mutation_test mutation_test_config.xml 
+          dart run mutation_test mutation_test_config.xml -f junit -o result
+      - name: Parse JUnit.xml
+        id: parse_junit_report
+        uses: tarappo/junit-test-case-analyzer@v1.0.0
+        if: always()
+        with:
+          junit_report_paths: "result/mutation-test.junit.xml"
