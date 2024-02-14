@@ -39,4 +39,4 @@ jobs:
         uses: tarappo/junit-test-case-analyzer@v1.0.0
         if: always()
         with:
-          junit_report_paths: "result/mutation-test.junit.xml"
+          junit_report_paths: "./dart/result/mutation-test.junit.xml"
