@@ -1,0 +1,36 @@
+name: Mutation Testing(Dart)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache bundle directory
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/.dart_tool/build
+          key: build-runner-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            build-runner-
+      - uses: dart-lang/setup-dart@v1
+      - name: Setup
+        shell: bash
+        id: setup
+        run: |
+          cd dart
+          dart pub get
+      - name: Mutation Testing
+        shell: bash
+        id: mutation-testing
+        run: |
+          cd dart
+          dart run mutation_test mutation_test_config.xml 
