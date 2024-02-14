@@ -1,0 +1,8 @@
+name: mutation_test_example
+
+environment:
+  sdk: '^3.1.0'
+
+dev_dependencies:
+  mutation_test: ^1.6.0
+  test: ^1.25.2
