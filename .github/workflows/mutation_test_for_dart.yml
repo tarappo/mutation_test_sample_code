@@ -54,7 +54,7 @@ jobs:
           TOTAL_FAILURE_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
           for count in ${TOTAL_FAILURE_COUNT}
           do
-            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+TOTAL_FAILURE_COUNT))
+            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
           done
 
           echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
