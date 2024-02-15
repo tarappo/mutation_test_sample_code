@@ -1,0 +1,70 @@
+name: Mutation Testing(Dart)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  mutation-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache bundle directory
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/.dart_tool/build
+          key: build-runner-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            build-runner-
+      - uses: dart-lang/setup-dart@v1
+      - name: Setup
+        shell: bash
+        id: setup
+        run: |
+          cd dart
+          dart pub get
+      - name: Mutation Testing
+        shell: bash
+        id: mutation-testing
+        run: |
+          cd dart
+          dart run mutation_test mutation_test_config.xml -f junit -o result
+      - name: Set env
+        id: set_env
+        run: |
+          cd dart
+
+          TOTAL_TEST_CASES=0
+          TOTAL_FAILURE_CASES=0
+          TOTAL_SUCCESS_CASES=0
+
+          # total test case
+          TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].tests`
+          for count in ${TOTAL_COUNT}
+          do
+            TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
+          done
+
+          # total failure case
+          TOTAL_FAILURE_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${TOTAL_FAILURE_COUNT}
+          do
+            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
+          done
+
+          echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
+          echo "TOTAL_FAILURE_CASES=$TOTAL_FAILURE_CASES" >> $GITHUB_ENV
+          echo "TOTAL_SUCCESS_CASES=$TOTAL_SUCCESS_CASES" >> $GITHUB_ENV
+      - name: GitHub Status
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: "Mutation Test"
+          description: "Total ${{ env.TOTAL_TEST_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
+          state: ${{ job.status }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}
