@@ -44,17 +44,10 @@ jobs:
           TOTAL_SUCCESS_CASES=0
 
           # total test case
-          TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].tests`
           for count in ${TOTAL_COUNT}
           do
             TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
-          done
-
-          # total success case
-          TOTAL_SUCCESS_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
-          for count in ${TOTAL_SUCCESS_COUNT}
-          do
-            TOTAL_SUCCESS_CASES=$((TOTAL_SUCCESS_CASES+count))
           done
 
           # total failure case
@@ -70,8 +63,8 @@ jobs:
       - name: GitHub Status
         uses: Sibz/github-status-action@v1
         with:
-          authToken: ${{secrets.GITHUB_TOKEN}}
+          authToken: ${{ secrets.GITHUB_TOKEN }}
           context: "Mutation Test"
-          description: "Total ${{ env.TOTAL_TEST_CASES }} / success ${{ env.TOTAL_SUCCESS_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
+          description: "Total ${{ env.TOTAL_TEST_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
           state: ${{ job.status }}
           sha: ${{ github.event.pull_request.head.sha || github.sha }}
