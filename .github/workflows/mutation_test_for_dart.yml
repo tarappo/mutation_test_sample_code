@@ -44,24 +44,24 @@ jobs:
           TOTAL_SUCCESS_CASES=0
 
           # total test case
-          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
-          for count in ${count}
+          TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${TOTAL_COUNT}
           do
             TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
           done
 
           # total success case
-          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
-          for count in ${count}
+          TOTAL_SUCCESS_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${TOTAL_SUCCESS_COUNT}
           do
             TOTAL_SUCCESS_CASES=$((TOTAL_SUCCESS_CASES+count))
           done
 
           # total failure case
-          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
-          for count in ${count}
+          TOTAL_FAILURE_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${TOTAL_FAILURE_COUNT}
           do
-            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
+            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+TOTAL_FAILURE_COUNT))
           done
 
           echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
@@ -70,7 +70,7 @@ jobs:
       - name: GitHub Status
         uses: Sibz/github-status-action@v1
         with:
-          authToken: ${{ inputs.authToken }}
+          authToken: ${{secrets.GITHUB_TOKEN}}
           context: "Mutation Test"
           description: "Total ${{ env.TOTAL_TEST_CASES }} / success ${{ env.TOTAL_SUCCESS_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
           state: ${{ job.status }}
