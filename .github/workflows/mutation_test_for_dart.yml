@@ -34,17 +34,44 @@ jobs:
         run: |
           cd dart
           dart run mutation_test mutation_test_config.xml -f junit -o result
-      - name: Parse JUnit.xml
-        id: parse_junit_report
-        uses: tarappo/junit-test-case-analyzer@v1.0.0
-        if: always()
-        with:
-          junit_report_paths: "./dart/result/mutation-test.junit.xml"
+      - name: Set env
+        id: set_env
+        run: |
+          cd dart
+
+          TOTAL_TEST_CASES=0
+          TOTAL_FAILURE_CASES=0
+          TOTAL_SUCCESS_CASES=0
+
+          # total test case
+          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${count}
+          do
+            TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
+          done
+
+          # total success case
+          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${count}
+          do
+            TOTAL_SUCCESS_CASES=$((TOTAL_SUCCESS_CASES+count))
+          done
+
+          # total failure case
+          count=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${count}
+          do
+            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
+          done
+
+          echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
+          echo "TOTAL_FAILURE_CASES=$TOTAL_FAILURE_CASES" >> $GITHUB_ENV
+          echo "TOTAL_SUCCESS_CASES=$TOTAL_SUCCESS_CASES" >> $GITHUB_ENV
       - name: GitHub Status
         uses: Sibz/github-status-action@v1
         with:
           authToken: ${{ inputs.authToken }}
           context: "Mutation Test"
-          description: "Total ${{ env.TOTAL_TEST_CASES }} / success ${{ env.TOTAL_SUCCESS_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }} / skipped ${{ env.TOTAL_SKIPPED_CASES }}"
+          description: "Total ${{ env.TOTAL_TEST_CASES }} / success ${{ env.TOTAL_SUCCESS_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
           state: ${{ job.status }}
           sha: ${{ github.event.pull_request.head.sha || github.sha }}
