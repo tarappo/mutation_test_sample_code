@@ -1,0 +1,14 @@
+arguments:
+- -project
+- mutation-testing.xcodeproj
+- -scheme
+- mutation-testing
+- -destination
+- 'platform=iOS Simulator,name=iPhone 15'
+- test
+executable: /usr/bin/xcodebuild
+exclude:
+- AppDelegate.swift
+- SceneDelegate.swift
+- ViewController.swift
+excludeCalls: []
