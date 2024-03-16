@@ -21,7 +21,7 @@ jobs:
           key: build-runner-${{ hashFiles('**/pubspec.lock') }}
           restore-keys: |
             build-runner-
-      - uses: dart-lang/setup-dart@v1
+      - uses: dart-lang/setup-dart@v1.6.2
       - name: Setup
         shell: bash
         id: setup
