@@ -28,7 +28,7 @@ jobs:
         run: |
           brew install muter-mutation-testing/formulae/muter
       - name: Mutation Testing
-        shell: bash
+        shell: sh
         id: mutation-testing
         run: |
           cd ios
