@@ -17,6 +17,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup
+        shell: bash
+        id: setup
+        run: |
+          brew install muter-mutation-testing/formulae/muter
       - name: Mutation Testing
         shell: bash
         id: mutation-testing
