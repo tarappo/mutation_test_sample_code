@@ -1,0 +1,59 @@
+name: Mutation Testing(iOS)
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "ios/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "ios/**"
+
+jobs:
+  mutation-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mutation Testing
+        shell: bash
+        id: mutation-testing
+        run: |
+          cd ios
+          muter --format json --output ./report.json
+      - name: Set env
+        id: set_env
+        run: |
+          cd dart
+
+          TOTAL_TEST_CASES=0
+          TOTAL_FAILURE_CASES=0
+          TOTAL_SUCCESS_CASES=0
+
+          # total test case
+          TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].tests`
+          for count in ${TOTAL_COUNT}
+          do
+            TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
+          done
+
+          # total failure case
+          TOTAL_FAILURE_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
+          for count in ${TOTAL_FAILURE_COUNT}
+          do
+            TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
+          done
+
+          echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
+          echo "TOTAL_FAILURE_CASES=$TOTAL_FAILURE_CASES" >> $GITHUB_ENV
+          echo "TOTAL_SUCCESS_CASES=$TOTAL_SUCCESS_CASES" >> $GITHUB_ENV
+      - name: GitHub Status
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: "Mutation Test"
+          description: "Total ${{ env.TOTAL_TEST_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
+          state: ${{ job.status }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}
