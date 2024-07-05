@@ -12,6 +12,10 @@ on:
     paths:
       - "ios/**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   mutation-test:
     runs-on: macos-latest
