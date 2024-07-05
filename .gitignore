@@ -33,4 +33,7 @@ vendor/
 ios_mutated/
 ./ios/.bundle/
 .bundle/
+dart/result/
+ios/muter_logs/
+ios/report.json
 
