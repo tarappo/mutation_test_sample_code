@@ -19,7 +19,7 @@ concurrency:
 jobs:
   mutation-test:
     runs-on: macos-14
-    timeout-minutes: 60
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
       - name: Setup
