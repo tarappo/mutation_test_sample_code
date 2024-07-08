@@ -26,7 +26,7 @@ jobs:
         shell: bash
         run: |
           cd ios
-          /Applications/Xcode_15.0.1.app/Contents/Developer/usr/bin/xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
+          xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
       # - name: Setup
       #   shell: bash
       #   id: setup
