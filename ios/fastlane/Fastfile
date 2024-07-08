@@ -1,0 +1,16 @@
+opt_out_usage
+
+default_platform(:ios)
+
+platform :ios do
+
+  lane :test do
+    run_tests(
+      project: "./mutation-testing.xcodeproj",
+      scheme: "mutation-testing",
+      output_directory: "./test_results",
+      result_bundle: true
+    )
+  end
+
+end
