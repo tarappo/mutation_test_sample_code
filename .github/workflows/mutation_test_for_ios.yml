@@ -44,7 +44,7 @@ jobs:
           TOTAL_KILLED_MUTANTS_COUNT=0
           PROJET_CODE_COVERAGE=0
 
-          TOTAL_KILLED_MUTANTS_COUNT=`cat ${DIR_PATH}/report.json | jq ..numberOfKilledMutants`
+          TOTAL_KILLED_MUTANTS_COUNT=`cat ${DIR_PATH}/report.json | jq .numberOfKilledMutants`
           PROJET_CODE_COVERAGE=`cat ${DIR_PATH}/reprot.json | jq .projectCodeCoverage`
 
           echo "TOTAL_KILLED_MUTANTS_COUNT=$TOTAL_KILLED_MUTANTS_COUNT" >> $GITHUB_ENV
