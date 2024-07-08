@@ -32,7 +32,10 @@ jobs:
         id: mutation-testing
         run: |
           cd ios
-          muter --format json --output ./report.json
+          DIR_PATH=$(cd $(dirname $0); pwd)
+          muter --format json --output ${DIR_PATH}/report.json
+          ls -l
+          cd ../
           ls -l
       - name: Set env
         id: set_env
