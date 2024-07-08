@@ -33,10 +33,12 @@ jobs:
         run: |
           cd ios
           muter --format json --output ./report.json
+          ls -l
       - name: Set env
         id: set_env
         run: |
           cd ios
+          ls -l
 
           TOTAL_KILLED_MUTANTS_COUNT=0
           PROJET_CODE_COVERAGE=0
