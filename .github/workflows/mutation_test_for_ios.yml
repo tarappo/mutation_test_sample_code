@@ -22,25 +22,22 @@ jobs:
     timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
-      - name: Testing
-        shell: bash
-        run: |
-          cd ios
-          xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
-      #    bundle install --path ./vendor/bundle
-      #    bundle exec fastlane test
-      # - name: Setup
+      # - name: Testing
       #   shell: bash
-      #   id: setup
-      #   run: |
-      #     brew install muter-mutation-testing/formulae/muter
-      # - name: Mutation Testing
-      #   shell: sh
-      #   id: mutation-testing
       #   run: |
       #     cd ios
-      #     export DEVELOPER_DIR=/Applications/Xcode_15.3.app
-      #     muter
+      #     xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
+      - name: Setup
+        shell: bash
+        id: setup
+        run: |
+          brew install muter-mutation-testing/formulae/muter
+      - name: Mutation Testing
+        shell: sh
+        id: mutation-testing
+        run: |
+          cd ios
+          muter
       # - name: Set env
       #   id: set_env
       #   run: |
