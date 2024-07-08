@@ -22,11 +22,6 @@ jobs:
     timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
-      # - name: Testing
-      #   shell: bash
-      #   run: |
-      #     cd ios
-      #     xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
       - name: Setup
         shell: bash
         id: setup
@@ -37,38 +32,25 @@ jobs:
         id: mutation-testing
         run: |
           cd ios
-          muter
-      # - name: Set env
-      #   id: set_env
-      #   run: |
-      #     cd dart
+          muter --format json --output ./report.json
+      - name: Set env
+        id: set_env
+        run: |
+          cd ios
 
-      #     TOTAL_TEST_CASES=0
-      #     TOTAL_FAILURE_CASES=0
-      #     TOTAL_SUCCESS_CASES=0
+          TOTAL_KILLED_MUTANTS_COUNT=0
+          PROJET_CODE_COVERAGE=0
 
-      #     # total test case
-      #     TOTAL_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].tests`
-      #     for count in ${TOTAL_COUNT}
-      #     do
-      #       TOTAL_TEST_CASES=$((TOTAL_TEST_CASES+count))
-      #     done
+          TOTAL_KILLED_MUTANTS_COUNT=`cat ./report.json | jq ..numberOfKilledMutants`
+          PROJET_CODE_COVERAGE=`cat ./reprot.json | jq .projectCodeCoverage`
 
-      #     # total failure case
-      #     TOTAL_FAILURE_COUNT=`npx junit2json ./result/mutation-test.junit.xml | jq .testsuite[].failures`
-      #     for count in ${TOTAL_FAILURE_COUNT}
-      #     do
-      #       TOTAL_FAILURE_CASES=$((TOTAL_FAILURE_CASES+count))
-      #     done
-
-      #     echo "TOTAL_TEST_CASES=$TOTAL_TEST_CASES" >> $GITHUB_ENV
-      #     echo "TOTAL_FAILURE_CASES=$TOTAL_FAILURE_CASES" >> $GITHUB_ENV
-      #     echo "TOTAL_SUCCESS_CASES=$TOTAL_SUCCESS_CASES" >> $GITHUB_ENV
-      # - name: GitHub Status
-      #   uses: Sibz/github-status-action@v1
-      #   with:
-      #     authToken: ${{ secrets.GITHUB_TOKEN }}
-      #     context: "Mutation Test"
-      #     description: "Total ${{ env.TOTAL_TEST_CASES }} / failure ${{ env.TOTAL_FAILURE_CASES }}"
-      #     state: ${{ job.status }}
-      #     sha: ${{ github.event.pull_request.head.sha || github.sha }}
+          echo "TOTAL_KILLED_MUTANTS_COUNT=$TOTAL_KILLED_MUTANTS_COUNT" >> $GITHUB_ENV
+          echo "PROJET_CODE_COVERAGE=$PROJET_CODE_COVERAGE" >> $GITHUB_ENV
+      - name: GitHub Status
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: "Mutation Test"
+          description: "Total ${{ env.TOTAL_KILLED_MUTANTS_COUNT }} / coverage ${{ env.PROJET_CODE_COVERAGE }}%"
+          state: ${{ job.status }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}
