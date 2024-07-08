@@ -26,7 +26,9 @@ jobs:
         shell: bash
         run: |
           cd ios
-          xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
+          bundle install --path ./vendor/bundle
+          bundle exec fastlane test
+      #    xcodebuild -project mutation-testing.xcodeproj -scheme mutation-testing -destination "platform=iOS Simulator,name=iPhone 15" test
       # - name: Setup
       #   shell: bash
       #   id: setup
