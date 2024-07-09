@@ -39,3 +39,7 @@ brew install muter-mutation-testing/formulae/muter
 ```
 $ muter --format json --output ./report.json 
 ```
+
+Result
+
+- [report](./ios/report.html)
