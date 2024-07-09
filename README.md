@@ -2,14 +2,21 @@
 Mutation Testを確かめるためのサンプルコード
 
 ## Dart
+### Setup
+ - Package
+   - https://pub.dev/packages/mutation_test
+
+```
+dart pub add --dev mutation_test
+dart run mutation_test
+```
+
+
+### Run
 
 ```
 $ dart run mutation_test mutation_test_config.xml
 ```
-
-Package
-
- - https://pub.dev/packages/mutation_test
 
 
 Result
@@ -18,12 +25,17 @@ Result
 
 
 ## iOS
+### Setup
+ - Library
+   - https://github.com/muter-mutation-testing/muter
+
+```
+brew install muter-mutation-testing/formulae/muter
+```
+
+
+### Run
 
 ```
 $ muter --format json --output ./report.json 
 ```
-
-Library
-
- - https://github.com/muter-mutation-testing/muter
-
