@@ -1,0 +1,59 @@
+name: Mutation Testing(iOS)
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "ios/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "ios/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutation-test:
+    runs-on: macos-14
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        shell: bash
+        id: setup
+        run: |
+          brew install muter-mutation-testing/formulae/muter
+      - name: Mutation Testing
+        shell: sh
+        id: mutation-testing
+        run: |
+          cd ios
+          DIR_PATH=$(cd $(dirname $0); pwd)
+          muter --format json --output ${DIR_PATH}/report.json
+      - name: Set env
+        id: set_env
+        run: |
+          cd ios
+          DIR_PATH=$(cd $(dirname $0); pwd)
+
+          TOTAL_KILLED_MUTANTS_COUNT=0
+          PROJET_CODE_COVERAGE=0
+
+          cat ${DIR_PATH}/report.json
+          TOTAL_KILLED_MUTANTS_COUNT=`cat ${DIR_PATH}/report.json | jq .numberOfKilledMutants`
+          PROJET_CODE_COVERAGE=`cat ${DIR_PATH}/report.json | jq .projectCodeCoverage`
+
+          echo "TOTAL_KILLED_MUTANTS_COUNT=$TOTAL_KILLED_MUTANTS_COUNT" >> $GITHUB_ENV
+          echo "PROJET_CODE_COVERAGE=$PROJET_CODE_COVERAGE" >> $GITHUB_ENV
+      - name: GitHub Status
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: "Mutation Test"
+          description: "Total ${{ env.TOTAL_KILLED_MUTANTS_COUNT }} / coverage ${{ env.PROJET_CODE_COVERAGE }}%"
+          state: ${{ job.status }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}

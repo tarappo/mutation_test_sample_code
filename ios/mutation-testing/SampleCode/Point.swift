@@ -9,20 +9,12 @@ import Foundation
 
 class Point {
     // ポイント計算
-    func calculate(money: Int, user: User) -> Int {
+    func calculate(money: Int) -> Int {
         if (money == 0) {
             return 0
         }
 
         var point = money/100
-
-        if (user.age >= 60) {
-            point = point * 2
-        }
-
-        if (point > 200) {
-            point = 200;
-        }
 
         return point
     }

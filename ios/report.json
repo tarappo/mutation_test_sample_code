@@ -1,0 +1,51 @@
+{
+  "numberOfKilledMutants" : 3,
+  "projectCodeCoverage" : 76,
+  "globalMutationScore" : 100,
+  "timeElapsed" : "00:04:50.935",
+  "fileReports" : [
+    {
+      "mutationScore" : 100,
+      "fileName" : "Point.swift",
+      "appliedOperators" : [
+        {
+          "mutationPoint" : {
+            "mutationOperatorId" : "RelationalOperatorReplacement",
+            "position" : {
+              "column" : 19,
+              "utf8Offset" : 276,
+              "line" : 13
+            },
+            "filePath" : "\/Users\/tarappo\/Desktop\/my\/mutation_test_sample_code\/ios_mutated\/mutation-testing\/SampleCode\/Point.swift"
+          },
+          "testSuiteOutcome" : "runtimeError"
+        },
+        {
+          "testSuiteOutcome" : "runtimeError",
+          "mutationPoint" : {
+            "mutationOperatorId" : "RelationalOperatorReplacement",
+            "position" : {
+              "line" : 19,
+              "column" : 22,
+              "utf8Offset" : 368
+            },
+            "filePath" : "\/Users\/tarappo\/Desktop\/my\/mutation_test_sample_code\/ios_mutated\/mutation-testing\/SampleCode\/Point.swift"
+          }
+        },
+        {
+          "mutationPoint" : {
+            "filePath" : "\/Users\/tarappo\/Desktop\/my\/mutation_test_sample_code\/ios_mutated\/mutation-testing\/SampleCode\/Point.swift",
+            "mutationOperatorId" : "RelationalOperatorReplacement",
+            "position" : {
+              "line" : 23,
+              "utf8Offset" : 436,
+              "column" : 19
+            }
+          },
+          "testSuiteOutcome" : "runtimeError"
+        }
+      ]
+    }
+  ],
+  "totalAppliedMutationOperators" : 3
+}
