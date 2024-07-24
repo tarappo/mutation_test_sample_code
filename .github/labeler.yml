@@ -1,0 +1,20 @@
+Documentation:
+- changed-files:
+  - any-glob-to-any-file:
+    - docs/*
+    - README.md
+
+"GitHub Actions Workflow":
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/*
+
+iOS:
+- changed-files:
+  - any-glob-to-any-file:
+    - ios/*
+
+Dart:
+- changed-files:
+  - any-glob-to-any-file:
+    - dart/*
